@@ -5,8 +5,25 @@
 \begin{document}
 
 \section{Kết quả đạt được}
+Khóa luận đã trình bày những phương pháp phân tích, trích xuất đặc trưng và đề xuất các mô hình sử dụng trong phân loại tự động các tài liệu PDF độc hại.
+
+Kết quả thí nghiệm 1 đã chỉ ra rằng, bằng cách trích xuất một tập hợp các đặc trưng trên phạm vi rộng, kết hợp nhiều loại đặc trưng khác nhau có thể tạo ra một công cụ phân loại và phát hiện phần mềm độc hại mạnh mẽ mang lại độ chính xác cao. Ở thí nghiệm này, em đã sử dụng một số kỹ thuật học máy khác nhau, học nhiều lần để điều chỉnh tham số của từng kỹ thuật và cuối cùng đưa ra một mô hình sử dụng thuật toán LightGBM được đánh giá là mang lại hiệu quả nhất.
+
+Tuy nhiên, với các cuộc tấn công né tránh, khi những tài liệu độc hại sử dụng nhiều kỹ thuật nâng cao, tinh vi nhằm che giấu những hành vi độc hại và bắt chước tính bình thường của các tệp sạch trong tập huấn luyện, thì chỉ sử dụng những đặc trưng thống kê và cấu trúc sẽ không thực sự hiệu quả, gây ra một số lượng âm tính giả cao. Từ đó, với việc đề xuất một phương pháp phát hiện tài liệu độc hại với hai giai đoạn, ở giai đoạn một, đã chỉ ra được một mô hình có thể mang lại tỷ lệ dương tính giả (FP) bằng 0, trong khi tỷ lệ âm tính giả (FN) được giữ ở mức tối thiểu trên tập huấn luyện. Mục tiêu này đã được thử nghiệm trên bộ dữ liệu được trích xuất ở thí nghiệm 1 và một số bộ dữ liệu đặc trưng được trích xuất trong một số công bố khác. Mô hình này được ứng dụng trong phạm vi khóa luận như một tường lửa, bước đầu lọc ra những tài liệu đảm bảo độc hại, trong khi những tài liệu được gán nhãn sạch sẽ tiếp tục được xử lý qua giai đoạn hai, thực hiện phân tích sâu hơn về các đoạn mã nhúng trong tài liệu.
+
+Ngoài ra, mô hình còn có tính ứng dụng cao trong những hệ thống cần lọc và ngăn chặn các xâm nhập bất thường. Ở các hệ thống nhạy cảm với độ trễ, khi mà tính liên tục của hoạt động là rất quan trọng, thì việc ngăn chặn lưu lượng truy cập hợp pháp do nhầm lẫn (dương tính sai) là điều khó có thể chấp nhận được, ví dụ như một số dịch vụ của chính phủ hoặc các hệ thống cung cấp điện, hệ thống phân phối nước.
+
+Bên cạnh đó, mô hình ở thí nghiệm 2 hoàn toàn có thể ứng dụng trong các hệ thống mong muốn phân loại âm tính giả bằng 0, bằng cách đổi lại cách gán nhãn kết quả. Ở những ứng dụng không mong muốn bỏ sót bất kỳ tài liệu độc hại nào như những hệ thống có tính bảo mật cao, những sự xâm phạm có thể gây hậu quả lớn.
+
 \section{Hạn chế và khó khăn}
-\section{Mở rộng}
+
+\begin{itemize}
+	\item
+	      Các công cụ hỗ trợ trích xuất đặc trưng khá cũ, yêu cầu cài đặt môi trường và một số gói phụ thuộc (package dependencies) cụ thể, gây khó khăn trong việc tiến hành nhiệm vụ trích xuất đặc trưng. Ngoài ra nhiều tệp PDF có cấu trúc biến đổi, gây khó khăn cho một số trình phân tích cú pháp.
+	\item
+	      Các đặc trưng API Javascript đã được trích xuất nhưng số lượng ít và không mang lại kết quả khả quan nên không được đề cập tới trong thí nghiệm của khóa luận này.
+\end{itemize}
+\section{Hướng nghiên cứu tương lai}
 
 
 \end{document}
