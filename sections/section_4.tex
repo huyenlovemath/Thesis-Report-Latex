@@ -3,8 +3,31 @@
 
 \begin{document}
 \section{Đặt vấn đề}
+Hiện nay, phương thức tấn công phổ biến nhất đối với các tệp PDF độc hại bắt nguồn từ việc nhúng các đoạn mã javascript - những đoạn mã mà sẽ được thực thi bởi ứng dụng đọc tệp PDF. Lợi dụng nhiều lỗ hổng bảo mật nghiêm trọng từ các trình đọc PDF, có thể kể đến nhiều nhất là Acrobat Reader, các kẻ tấn công đã sử dụng mã javascript để thực hiện khai thác các lỗ hổng đó, nhằm xâm nhập vào hệ thống máy tính nạn nhân và thực hiện những hành vi độc hại. Việc phân tích tĩnh và trích xuất các đặc trưng thực hiện ở chương 2 chỉ mang tính chất thống kê và kiểm tra sự tồn tại của javascript, chưa thực sự đi sâu vào khai thác các hành vi của mã. Bên cạnh đó, với sự phát triển của kỹ thuật làm rối, các đoạn mã javascript càng trở nên khó phát hiện hơn, hoặc được xây dựng trông như một đoạn mã lành tính, gây nhiễu cho các mô hình phân loại học máy. Có thể thấy các đặc trưng đã trích xuất chưa thực sự đem lại một kết quả tốt với các mã có nhúng javascript.
+Ở chương này, tôi đề xuất một phương pháp gồm hai giai đoạn để xử lý các tệp PDF có chứa javascript.
+\begin{itemize}
+	\item Giai đoạn một thực hiện trích xuất đặc trưng cơ bản và đưa qua bộ phân loại Zero False Positive với mục tiêu của giai đoạn này là tạo nên một tường lửa nhạy bén với các tệp độc, đảm bảo loại bỏ được những tệp chắc chắn là độc, tức mô hình học máy không gây ra dương sai (FP).
+	\item Giai đoạn hai được đề xuất sẽ xử lý các tệp PDF được gán nhãn sạch, bằng các kỹ thuật xử lý nâng cao, đòi hỏi thời gian và chi phí phân tích hơn để tìm ra chính xác tệp PDF độc hại nào còn sót lại.
+\end{itemize}
+
 \section{Bộ phân loại Zero False Positive}
+Bộ phân loại Zero False Positive được đề xuất trong giai đoạn một để mang tới một kết quả phân loại không có gán nhãn dương sai. Ý tưởng xây dựng dựa trên mô hình được đề xuất trong công bố của Mohammad Sayad Haghighi và cộng sự \cite{zfp}.
+
 \subsection{Thuật toán phân loại lặp với mục tiêu FP = 0}
+% figure
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/zfp_flow_chart.png}
+	\caption{Sơ đồ luồng hoạt động của thuật toán lặp Zero False Positive}
+	\label{fig:zfp_flow_chart}
+\end{figure}
+
+% figure
+\begin{figure}[ht!]
+	\includegraphics[width=\linewidth]{./images/algorithm_zfp.png}
+	\caption{Mã giả thuật toán lặp Zero False Positive}
+	\label{fig:algorithm}
+\end{figure}
+
 \subsection{Thực nghiệm và đánh giá kết quả}
 Tiến hành thực nghiệm để kiểm định mô hình trên tập huấn luyện gồm các tệp PDF đã được trích xuất đặc trưng thống kê và đặc trưng cấu trúc trong chương 2. Kết quả cho thấy số lượng FP qua các vòng lặp đều được đảm bảo bằng 0 và số lượng FN giảm dần. Tuy nhiên, từ vòng lặp thứ 700 - 1000, kết quả FN không giảm, duy trì số lượng 97, với tỉ lệ FNR bằng 0.0095.
 
