@@ -3,4 +3,68 @@
 
 \begin{document}
 
+\section{Zero FP}
+Cho một tập dữ liệu với 2 nhãn và một bộ phân loại C, sau một số vòng lặp hữu hạn với thuật toán được đề xuất trên, có thể dẫn tới số lượng FP = 0.
+
+Chứng minh:
+
+Cho tập dữ liệu $T (x_i;y_i)$ với $i=1,\ldots,m$ và $y$ thuộc $(-1;1)$. Bộ phân loại C mục tiêu giảm thiểu hàm chi phí J được định nghĩa trước.
+
+
+Chú ý rằng thuật toán sẽ tạo ra một tập giản lược từ tập $T$ ban đầu, gồm tất cả các mẫu âm, do đó, nếu với đường biên Bi của bộ phân loại $C$ giúp $FP$ trên tập giản lược bằng 0 thì $FP$ trên tập $T$ ban đầu cũng sẽ bằng 0. Từ đó, chúng ta sẽ chứng minh $FP$ sẽ có thể bằng $0$ trên tập giản lược, gọi là tập $S$ qua hữu hạn các vòng lặp.
+
+
+Giả sử vòng lặp đầu tiên, bộ phân loại với đường biên $B_0$ gây ra một số $FN_s$ và $FP_s$ trên tập $S$. Hàm chi phí của bộ phân loài là $J(FN_0,FP_0)$. Theo thuật toán Zero FP, những tập dương gây ra $FN $ sẽ được loại bỏ khỏi tập giản lược $S$, thành $S(1)$ ($S(i)$ là tập $S$ sau lần cập nhật thứ $i$). Khi đó, với biên $B_0$, tập $S(1)$ sẽ có $FN_0 = 0$ và hàm chi phí trên tập $S(1)$ chỉ phụ thuộc vào $FP$, tức:
+
+$J(FP_0) < J(FN_0, FP_0)$ hay $J(FP_0) = r_1 J(FN_0, FP_0) ( 0 \leq r_1 \leq 1)$
+
+Tập được cập nhật $S(1)$ sau đó sẽ được phân loại lại với $C$ với đường biên $B1$ mới, với hàm chi phí $J(FN_1, FP_1)$. Mục tiêu của hàm phân loại là giảm hàm chi phí, do đó, hàm chi phí lúc này sẽ nhỏ hơn hàm chi phí trước khi phân loại.
+
+
+$J(FN_1, FP_1) < J(FP_0)$ hay $J(FN_1, FP_1) = q_1 J(FP_0) (0 \leq q_1 \leq 1)$
+
+Hiển nhiên nếu lúc này $FP_1$ bằng 0, chúng ta được điều phải chứng minh. Ngược lại, với $FP_1 >0$, nếu $FN_1 > 0$ thì thuật toán tiếp tục thực hiện loại bỏ những mẫu dương gây $FN_1$, thành tập $S(2)$ với hàm chi phí trên $B_1$ là
+
+
+$J(FP_1) < J(FN_1, FP_1)$ hay $J(FP_1) = r_2 J(FN_1,FP_1)$
+
+Tương tự như vậy, với thuật toán giản lược các mẫu dương bị sai (gây $FN$), tại vòng lặp thứ $k$, sau khi tìm ra $B_k$ mới dựa trên phân loại $S(k)$ được giản lược từ vòng $k-1$, hàm chi phí là $J(FN_k, FP_k) = q_k J(FP_{k-1})$
+
+Kết thúc vòng lặp này, nếu $FP$ vẫn khác 0, thì sẽ thực hiện loại bỏ $FN$, trở thành
+
+
+$J(FP_k) = r_k J(FN_k, FP_k)$
+
+
+$\Rightarrow J(FP_k) = r_k q_k J(FP_{k-1}) = \ldots = T(r_i q_i)J(FP_0)$
+
+Vì $T(r_i q_i) \rightarrow 0$. Do đó $lim_{k \to \infty} J(FP_k) = 0$ với biên $Bk$
+Từ đó khi với biên $B_k$, tập $S$ có $FP = 0$, thì tập ban đầu cũng có $FP=0$
+
+\section{Tập giản lược S luôn có thể phân tách được}
+
+Với điều kiện khởi tạo ban đầu đảm bảo tập $S$ phân tách được, ta được điều phải chứng minh ở vòng lặp đầu tiên.
+
+Do đó, ta chỉ cần chứng minh sau một hữu hạn vòng lặp, nhờ thuật toán lược bỏ một số mẫu ra khỏi tập dữ liệu, tập $S$ có thể phân tách được. Sử dụng kết quả của định lý chứng minh trong mục trên, ta được:
+
+$J(FN_{k+1}, FP_{k+1}) = q_{k+1} J(FP_k)$
+
+
+Mà $J(FP_k) \rightarrow 0$ khi $k \to \infty$.
+
+
+$ \Rightarrow J(FN_{k+1}, FP_{k+1}) \rightarrow 0$ khi $k \to \infty$.
+
+Lúc này, hàm chi phí bị ảnh hưởng bởi số lượng $FN$ và $FP$ tiến tới $0$, mang lại kết quả phân tách được trên tập $S$.
+
+
+\section{FN giảm dần khi FP bằng 0}
+
+Chú ý rằng mục tiêu của thuật toán là $FP = 0$, nên chỉ khi $FP=0$, chúng ta mới tập trung giảm $FN$. Do đó phần này sẽ chứng minh trong khi duy trì $FP=0$, tập $S$ phân tách được thì thuật toán sẽ giảm $FN$ trên tập $T$ ban đầu.
+Xét tập giản lược $S$, với $S(i)$ là lần cập nhật thứ $i$ của tập $S$ sau mỗi vòng lặp.
+
+Từ điều kiện của giả thiết, giả sử $S(k)$ phân tách được với biên $B_k$, tức $FP=FN=0$. Biên này trên tập $T$ ban đầu gây ra một lượng $TP(k)>0$ và $FN(k) >0$, thuật toán thực hiện thêm tất cả các mẫu dương được phân loại đúng (TP) và một vài mẫu dương trong $FN(k)$ mẫu dương bị phân loại sai (gây FN) vào tập $S(k)$, thành $S(k+1)$. Khi đó ở vòng lặp tiếp theo, tập $S(k+1)$ giữ nguyên số lượng mẫu âm, tăng số lượng mẫu dương. Do đó biên $B(k+1)$ sẽ cố gắng dịch chuyển về phía mẫu âm để hàm chi phí $J$ được giảm, tức mô hình sẽ chú ý vào các mẫu dương bị phân loại sai (gây FN), cố gắng dịch chuyển để có thể phân loại đúng các mẫu này. Từ đó $FN(k+1) \leq FN(k)$, tức số lượng $FN$ ở trên tập $T$ có thể được giảm.
+
+Tuy nhiên, theo như giả thiết, $FN$ chỉ giảm khi $FP$ được giữ về 0, ngay khi $FP >0$, thuật toán sẽ thực hiện nhân bản tất cả mẫu âm hoặc lược bỏ các mẫu âm sai (FN), mục tiêu để tăng trọng số cho các mẫu âm, giảm lượng FP. Điều này có thể làm số lượng FN tăng lên. Do đó, giá trị của FN trong mô hình của Best là giá trị nhỏ nhất cục bộ.
+
 \end{document}
