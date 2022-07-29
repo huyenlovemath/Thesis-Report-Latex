@@ -92,11 +92,9 @@ Có thể thấy trong hình \ref{fig:update}, tệp PDF vẫn chứa các phầ
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[width=0.5\linewidth]{./images/img_increase_update.png}
-	\caption{Cấu trúc tệp PDF khi có cập nhật}
+	\caption{Cấu trúc tệp PDF khi có cập nhật \protect\footnotemark}
 	\label{fig:update}
 \end{figure}
-
-
 
 \subsection{Cấu trúc logic}
 
@@ -106,9 +104,12 @@ Cấu trúc logic của tài liệu PDF chỉ ra cách các đối tượng liê
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[width=0.75\linewidth]{./images/logic_structure_pdf.png}
-	\caption{Mô hình phân cấp các đối tượng bên trong cấu trúc logic của tài liệu PDF}
+	\caption{Mô hình phân cấp các đối tượng bên trong cấu trúc logic của tài liệu PDF \protect\footnotemark}
 	\label{fig:logic_structure}
 \end{figure}
+
+\footnotetext{\url{https://www.iso.org/standard/51502.html}}
+
 
 \begin{description}
 	\item[Catalog]  cung cấp thông tin chung về loại đối tượng nào sẽ được hiển thị trong tệp PDF, nội dung của tài liệu và một số hướng dẫn cụ thể cho các trình đọc PDF về cách hiển thị PDF lên màn hình sau khi được mở. Hình \ref{fig:catalog} là một ví dụ về một đối tượng catalog trong tệp PDF, với từ khóa 'PageMode' xác định cách tệp sẽ được hiển thị, 'OpenAction' chỉ định hành động sẽ được thực thi ngay sau khi mở tệp, và 'Pages' tham chiếu tới nút gốc của một cây các trang trong tài liệu PDF.
@@ -174,9 +175,9 @@ Nhận thức được điểm yếu khi chỉ sử dụng một mô hình đơn
 	\label{fig:compare_ensemble_methods}
 \end{figure}
 
-Trong phạm vi của khóa luận này, tôi đề xuất sử dụng một thuật toán boosting được phát triển bởi Microsoft là LightGBM \cite{lightgbm}. LightGBM viết tắt của Light Gradient Boosting Machine, là một mô hình xử lý thuật toán học kết hợp tăng cường. Mô hình này cũng sử dụng Cây quyết định để xây dựng các mô hình thành phần. Sau mỗi lần thực hiện huấn luyện trên một mô hình với một tập dữ liệu con, thuật toán sẽ cập nhật tham số của mô hình theo hướng giảm của đạo hàm hàm mất mát.
+Trong phạm vi của khóa luận này, tôi đề xuất sử dụng một thuật toán boosting được phát triển bởi Microsoft là LightGBM \footnote{\url{https://lightgbm.readthedocs.io/en/v3.3.2/}}. LightGBM viết tắt của Light Gradient Boosting Machine, là một mô hình xử lý thuật toán học kết hợp tăng cường. Mô hình này cũng sử dụng Cây quyết định để xây dựng các mô hình thành phần. Sau mỗi lần thực hiện huấn luyện trên một mô hình với một tập dữ liệu con, thuật toán sẽ cập nhật tham số của mô hình theo hướng giảm của đạo hàm hàm mất mát.
 
-Với nhiều kỹ thuật và cơ chế phức tạp, thuật toán LightGBM mang lại một bộ phân loại mạnh mẽ, tốc độ tính toán được tối ưu, do đó cần ít thời gian xử lý hơn so với các thuật toán cùng loại khác trên các tập huấn luyện có kích thước lớn \cite{lightgbm}.
+Với nhiều kỹ thuật và cơ chế phức tạp, thuật toán LightGBM mang lại một bộ phân loại mạnh mẽ, tốc độ tính toán được tối ưu, do đó cần ít thời gian xử lý hơn so với các thuật toán cùng loại khác trên các tập huấn luyện có kích thước lớn \footnote{\url{https://lightgbm.readthedocs.io/en/v3.3.2/}}.
 
 \section{Phát hiện tài liệu PDF độc hại}
 
@@ -219,5 +220,6 @@ Tiền xử lý cho thấy các kỹ thuật xử lý được sử dụng ứng
 	\item Trích xuất opcode: một kỹ thuật tấn công được sử dụng trong các tài liệu PDF độc hại là xây dựng các đoạn mã shellcode trong thời gian thực thi bằng cách sao chép các chuỗi opcode ẩn giấu trong các biến. Do đó, một phương pháp phát hiện được đề xuất thực hiện phân tích động để xác định các biến có thể chứa các chuỗi opcode độc hại hoặc đáng ngờ. PDF Scrutinizer \cite{scrutinizer} xây dựng một phương pháp phỏng đoán đề xác định vị trí nào cần để phân tích. MDScan \cite{mdscan} chọn các chuỗi cần tìm shellcode bằng cách quan sát các chuỗi được tạo ra trong thời gian chạy, quét các vùng nhớ của các chuỗi mới được cấp phát.
 
 \end{itemize}
+
 
 \end{document}

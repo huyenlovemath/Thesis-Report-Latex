@@ -27,7 +27,14 @@ Trong quá trình cài đặt các công cụ trích xuất đặc trưng, tôi 
 	      Các đặc trưng API JavaScript đã được trích xuất nhưng số lượng ít và không mang lại kết quả khả quan nên không được đề cập tới trong thí nghiệm của khóa luận này.
 
 \end{itemize}
-Trong quá trình xây dựng mô hình và huấn luyện, với tập dữ liệu khá lớn, cùng với quá trình điều chỉnh tham số và chọn mô hình tốt nhất đòi hỏi một thời gian chạy dài. Mô hình Zero False Positive cũng cần một số vòng lặp lớn để có thể mang lại kết quả có ý nghĩa.
+Trong quá trình xây dựng mô hình và huấn luyện, với tập dữ liệu khá lớn, cùng với quá trình điều chỉnh tham số và chọn mô hình tốt nhất đòi hỏi một thời gian chạy dài. Bên cạnh đó, mô hình False Zero Positive đảm bảo không có dương tính giả trên tập huấn luyện, để đảm bảo kết quả này trên tập kiểm thử, cần phải xem xét ngưỡng dừng của tỉ lệ FNR ở mức không quá nhỏ hoặc cần có những cải tiến trong xây dựng mô hình.
 
 \section{Định hướng phát triển}
+
+Về định hướng phát triển đề tài trong tương lai, tôi đề xuất một số phương pháp phân tích và trích xuất được các đặc trưng JavaScript có giá trị để phục vụ phát hiện các tệp PDF độc hại.
+\begin{itemize}
+	\item Sử dụng công cụ PhoneyPDF để trích xuất các API JavaScript tương tác với trình đọc PDF Acrobat Reader bằng cả phân tích tĩnh và phân tích động. Từ đó có thể có được một tập các đặc trưng gồm các API thể hiện hành vi của các đoạn mã javascript được nhúng trong tệp PDF.
+	\item Sử dụng trình biên dịch JavaScript của Google là V8 để trích xuất các bytecode từ Javascript- dưới dạng mã máy, mục tiêu có thể chống lại sự ẩn giấu hành vi của các đoạn mã JavaScript bị làm rối. Rozi và các cộng sự \cite{bytecode} đã sử dụng phương pháp phân tích này để trích xuất ra được tập các đặc trưng là các chuỗi bytecode, sau đó sử dụng một mô hình học sâu DPCNN \cite{dpcnn} để phân loại và phát hiện các tài liệu PDF độc hại.
+	\item Một hướng phân tích tĩnh các đoạn mã JavaScript cũng hiệu quả được Vatamanu và cộng sự \cite{vatamanu} đề xuất, sử dụng công cụ SpiderMonkey để trích xuất ra các đặc trưng JS Token - một dạng trừu tượng hóa mã JavaScript nhằm loại bỏ những chi tiết gây rối giúp dễ dàng nhận diện và phát hiện bất thường.
+\end{itemize}
 \end{document}

@@ -5,7 +5,7 @@
 Ở chương trước, tôi đã giới thiệu về quy trình phát hiện một tài liệu PDF độc hại, gồm hai phần chính là trích xuất đặc trưng và phân loại dữ liệu. Chương hai này sẽ tiến hành thử nghiệm, từ cài đặt công cụ trích xuất đặc trưng trên tập dữ liệu thu thập được đến xây dựng mô hình học máy mang lại độ chính xác cao khi phân loại một tệp sạch hay độc hại. Các đặc trưng được trích xuất đều dựa trên phân tích tĩnh tệp PDF, gồm hai loại đặc trưng thống kê và đường dẫn cấu trúc. Phần cuối của chương sử dụng mô hình học máy để đánh giá kết quả khi kết hợp các đặc trưng trên.
 
 \section{Tập dữ liệu}
-Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp độc là 58\%, tệp sạch là 42\%, không gây sự chênh lệch quá lớn trên hai nhãn. Trong đó số lượng tài liệu có nhúng JavaScript chiếm 75\% (Bảng \ref{tab:data_contain_JavaScript}). Toàn bộ tập dữ liệu là kết quả của quá trình thu thập và loại bỏ tệp trùng lặp từ một số nguồn như Contagio \cite{contagio}, Evasive-PDFMal2022 \cite{evasive} và VirusTotal \footnote{\url{https://www.virustotal.com/}}. Với VirusTotal, thực hiện truy vấn để tìm kiếm các tệp PDF độc hại có nhúng JavaScript và được gán nhãn CVE có độ nguy hiểm cao. Một số CVE được thu thập trong các tài liệu PDF độc như CVE-2007-5659, CVE-2008-2992, CVE-2009-4324, CVE-2010-0188,...
+Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp độc là 58\%, tệp sạch là 42\%, không gây sự chênh lệch quá lớn trên hai nhãn. Trong đó số lượng tài liệu có nhúng JavaScript chiếm 75\% (Bảng \ref{tab:data_contain_JavaScript}). Toàn bộ tập dữ liệu là kết quả của quá trình thu thập và loại bỏ tệp trùng lặp từ một số nguồn như Contagio \cite{contagio}, Evasive-PDFMal2022 \footnote{\url{https://www.unb.ca/cic/datasets/pdfmal-2022.html}} và VirusTotal \footnote{\url{https://www.virustotal.com/}}. Với VirusTotal, thực hiện truy vấn để tìm kiếm các tệp PDF độc hại có nhúng JavaScript và được gán nhãn CVE có độ nguy hiểm cao. Một số CVE được thu thập trong các tài liệu PDF độc như CVE-2007-5659, CVE-2008-2992, CVE-2009-4324, CVE-2010-0188,...
 
 \begin{table}[]
 	\centering
@@ -166,8 +166,7 @@ Một số đường dẫn có thể xảy ra rất ít trong tập dữ liệu 
 
 
 \subsection*{Công cụ Hidost}
-Công cụ Hidost \footnote{\url{https://github.com/srndic/hidost}} là công cụ được phát triển dựa theo ý tưởng trên, thực hiện trích xuất các đặc trưng đường dẫn cấu trúc của một tệp PDF, ngoài ra còn hỗ trợ các tệp SWF. Đầu vào của công cụ là một tập các tệp PDF, đầu ra là một tập các tệp dữ liệu đã được trích xuất tương ứng với từng tệp đầu vào. Trong quá trình cài đặt, với số lượng mẫu hơn 20000 tệp, tôi đã tiến hành đặt ngưỡng 900, tức các đặc trưng đường dẫn xuất hiện trong ít nhất 900 tệp sẽ được sử dụng trong tập đặc trưng cuối cùng. Kết quả sau khi thực thi, có 315 đặc trưng được trích xuất, phục vụ cho quá trình huấn luyện xây dựng mô hình học máy ở các phần sau. Do số lượng đặc trưng là tương đối lớn nên sẽ không được liệt kê trong khóa luận này, có thể xem
-
+Công cụ Hidost \footnote{\url{https://github.com/srndic/hidost}} là công cụ được phát triển dựa theo ý tưởng trên, thực hiện trích xuất các đặc trưng đường dẫn cấu trúc của một tệp PDF, ngoài ra còn hỗ trợ các tệp SWF. Đầu vào của công cụ là một tập các tệp PDF, đầu ra là một tập các tệp dữ liệu đã được trích xuất tương ứng với từng tệp đầu vào. Trong quá trình cài đặt, với số lượng mẫu hơn 20000 tệp, tôi đã tiến hành đặt ngưỡng 900, tức các đặc trưng đường dẫn xuất hiện trong ít nhất 900 tệp sẽ được sử dụng trong tập đặc trưng cuối cùng. Kết quả sau khi thực thi, có 315 đặc trưng được trích xuất, phục vụ cho quá trình huấn luyện xây dựng mô hình học máy ở các phần sau. Do số lượng đặc trưng là tương đối lớn nên sẽ không được liệt kê trong khóa luận này, mà được liệt kê tại \href{https://docs.google.com/spreadsheets/d/1KLXWeywZy-YMoBGRXR1Oxle_OgLIHJUKCSUHza2meOc/edit#gid=0}{\underline{Các đặc trưng cấu trúc cây}}.
 \section{Phân loại và đánh giá kết quả}
 
 Như đã đề cập ở mục 1.3, một quy trình phát hiện tự động tệp PDF độc hại gồm trích xuất đặc trưng và xây dựng mô hình phân loại. Kết quả của quá trình thử nghiệm trích xuất đặc trưng trong mục 2.2 mang lại một tập các dữ liệu tệp đã được xử lý, là đầu vào cho quá trình phân loại này. Khi thực hiện phân loại, với mục tiêu xây dựng một mô hình học máy có thể mang lại kết quả dự đoán tốt nhất, các đặc trưng đã được xếp hạng, lựa chọn và đánh giá trên tập kiểm định.
@@ -190,7 +189,9 @@ Ngoài ra một số đặc trưng liên quan đến đoạn mã JavaScript hay 
 
 \subsection{Điều chỉnh tham số và số lượng đặc trưng}
 
-Như đã giới thiệu, ở thí nghiệm này, tôi sử dụng optuna để tự động điều chỉnh tham số đầu vào cho thuật toán học máy LightGBM. Qua quá trình lặp lại với nhiều lần điều chỉnh, tôi đã chọn được bộ tham số mang lại kết quả tốt nhất cho thuật toán. Dưới đây là biểu đồ so sánh kết quả kiểm định trên các mô hình LightGBM tốt nhất được ghi lại tại lần thử thứ 10, 100 và 1000. Biểu đồ \ref{fig:exp1_trials} đã cho thấy hiệu quả của việc điều chỉnh tham số trong mô hình học máy.
+Như đã giới thiệu, ở thí nghiệm này, tôi sử dụng optuna để tự động điều chỉnh tham số đầu vào cho thuật toán học máy LightGBM. Công cụ optuna sử dụng một kỹ thuật gọi là Tree-Parzen Estimator \cite{optuna} đề chọn ra một tập các siêu tham số cho lần thử tiếp theo, dựa trên lịch sử của các lần điều chỉnh trước đó. Vậy nên, sau nhiều vòng lặp, công cụ này có thể mang lại một tập các tham số đầu vào tốt hơn cho thuật toán.
+
+Qua quá trình lặp lại với nhiều lần điều chỉnh, tôi đã chọn được bộ tham số mang lại kết quả tốt nhất cho thuật toán. Dưới đây là biểu đồ so sánh kết quả kiểm định trên các mô hình LightGBM tốt nhất được ghi lại tại sau lần điều 10, 100 và 1000. Biểu đồ \ref{fig:exp1_trials} đã cho thấy hiệu quả của việc điều chỉnh tham số trong mô hình học máy.
 
 \begin{figure}[H]
 	\centering
