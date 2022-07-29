@@ -31,6 +31,7 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{listings,xcolor}
+\usepackage{glossaries}
 
 \definecolor{dkgreen}{rgb}{0,.6,0}
 \definecolor{dkblue}{rgb}{0,0,.6}
@@ -44,9 +45,9 @@
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{2}
 
-\newcommand{\iindex}[1]{\textit{#1}\index{#1}}
-\renewcommand{\lstlistingname}{Đoạn mã}% Listing -> Algorithm
-\renewcommand{\lstlistlistingname}{Danh sách các đoạn mã}
+% \newcommand{\iindex}[1]{\textit{#1}\index{#1}}
+% \renewcommand{\lstlistingname}{Đoạn mã}% Listing -> Algorithm
+% \renewcommand{\lstlistlistingname}{Danh sách các đoạn mã}
 
 % Create file reference.bib to add
 \addbibresource{./reference.bib}
@@ -55,7 +56,7 @@
 \DeclareGraphicsExtensions{.png,.eps,.svg}
 \setlist[description]{leftmargin=\parindent,labelindent=\parindent}
 
-\title{PHÁT TRIỂN CÔNG CỤ TRÍCH XUẤT VÀ ĐÁNH GIÁ ĐẶC TRƯNG PHỤC VỤ PHÁT HIỆN MÃ ĐỘC TRONG TÀI LIỆU PDF}
+\title{TRÍCH XUẤT VÀ ĐÁNH GIÁ ĐẶC TRƯNG PHỤC VỤ PHÁT HIỆN MÃ ĐỘC TRONG TÀI LIỆU PDF}
 
 \lstset{
   language        = php,
@@ -86,25 +87,16 @@ Trong những năm gần đây, PDF hay viết tắt của Portable Document For
 \chapter*{Lời cảm ơn}
 
 
-Lời đầu tiên cho phép em được gửi lời cảm ơn tới Khoa Công Nghệ Thông Tin - Trường Đại học Công
-Nghệ ĐHQG Hà Nội đã tạo điều kiện thuận lợi cho em được học tập, nghiên cứu và thực hiện
-đề tài tốt nghiệp này.
+Đầu tiên tôi xin được gửi lời cảm ơn chân thành tới thầy Lê Đình Thanh đã chỉ dẫn tận tình và đóng góp ý kiến giúp tôi có thể hoàn thành khóa luận tốt nghiệp một cách trọn vẹn nhất.
 
-Em cũng xin được bày tỏ lòng biết ơn sâu sắc tới thầy Lê Đình Thanh đã tận tình hướng dẫn,
-đóng góp những ý kiến giúp em hoàn thành khóa luận tốt nghiệp một cách tốt nhất.
-
-Em cũng vô cùng biết ơn các thầy cô trong trường tận tình giảng dạy, truyền thụ cho
-em những kiến thức và kỹ năng quan trọng làm hành trang vững chắc trên con đường học vấn
-của bản thân.
-
-Chúc mọi người luôn luôn mạnh khoẻ và gặt hái được nhiều thành công trong cuộc sống.
+Tôi cũng xin bày tỏ lòng biết ơn tới các thầy cô cùng Khoa Công Nghệ Thông Tin - Trường Đại học Công
+Nghệ ĐHQG Hà Nội truyền thụ cho tôi những kiến thức quan trọng, đồng thời tạo điều kiện cho tôi được nghiên cứu và thực hiện đề tài tốt nghiệp này.
 
 \chapter*{Lời cam đoan}
 
-Em xin cam đoan rằng khóa luận tốt nghiệp này không sao chép từ bất kỳ ai,
-tổ chức nào khác. Toàn bộ nội dung được trình bày trong tài liệu đều là cá nhân em qua quá
-trình học tập, tìm hiểu và nghiên cứu mà hoàn thiện. Mọi tài liệu tham khảo đều được ghi chép
-lại và trích dẫn hợp pháp. Nếu lời cam đoan là sai sự thật thì em xin chịu mọi trách nhiệm và
+Tôi xin cam đoan rằng khóa luận "Trích xuất và đánh giá đặc trưng phục vụ phát hiện mã độc trong tài liệu PDF" này không sao chép từ bất kỳ ai,
+tổ chức nào khác. Toàn bộ nội dung trong tài liệu là cá nhân tôi qua quá
+trình học tập và nghiên cứu mà hoàn thiện. Mọi tài liệu tham khảo đều được trích dẫn hợp pháp. Nếu lời cam đoan là sai sự thật thì tôi xin chịu mọi trách nhiệm và
 hình thức kỷ luật theo quy định từ phía nhà trường.
 
 \tableofcontents{}
@@ -114,7 +106,9 @@ hình thức kỷ luật theo quy định từ phía nhà trường.
 
 \listoftables{}
 
-\lstlistoflistings
+\clearpage{}
+\printglossaries[title=Danh sách thuật ngữ]
+\clearpage
 
 \chapter*{Mở đầu}
 \pagenumbering{arabic}
@@ -126,6 +120,7 @@ hình thức kỷ luật theo quy định từ phía nhà trường.
 \subfile{./sections/section_2.tex}
 
 \chapter{Kết hợp đặc trưng thống kê và cấu trúc cây trong phát hiện PDF độc hại}
+
 \subfile{./sections/section_3.tex}
 
 \chapter{Xây dựng mô hình phân loại Zero False Positive}
