@@ -13,7 +13,7 @@ Hiện nay, phương thức tấn công phổ biến nhất đối với các t�
 \section{Bộ phân loại Zero False Positive}
 Bộ phân loại Zero False Positive được đề xuất trong giai đoạn một để mang tới một kết quả phân loại không có gán nhãn dương sai. Ý tưởng xây dựng dựa trên mô hình được đề xuất trong công bố của Mohammad Sayad Haghighi và cộng sự \cite{zfp}.
 
-\subsection{Thuật toán phân loại lặp với mục tiêu FP = 0}
+\subsection{Thuật toán Zero False Positive}
 % figure
 \begin{figure}[ht!]
 	\includegraphics[width=\linewidth]{./images/zfp_flow_chart.png}
@@ -111,7 +111,9 @@ Tài liệu PDF độc hại sử dụng JavaScript thường được đặc tr
 Nhằm phục vụ cho việc phân tích hành vi độc hại, đầu tiên, các đoạn mã JavaScript sẽ được trích xuất tĩnh hoặc động. Với phương pháp tĩnh, mã sẽ được trích xuất trực tiếp từ tệp, qua việc tìm vị trí của các đoạn mã JavaScript (thường được tìm thông qua các từ khóa “/JavaScript” hoặc “/JS”). Trong khi đó, ở phương pháp động, tệp sẽ được mở và lấy được chính xác đoạn mã nào sẽ thực thi (đặc biệt hữu ích trong việc chống lại kỹ thuật obfuscation). Việc trích xuất động sẽ yêu cầu một môi trường an toàn để thực thi và đòi hỏi nhiều tài nguyên hơn.
 
 
-Các đoạn mã JavaScript được trích xuất theo đó sẽ được xử lý thông qua một số kỹ thuật như phân tích từ vựng, trích xuất opcode hay tham chiếu các API nhằm đưa ra tập đặc trưng cuối cùng sử dụng trong các mô hình phân loại. Trong phạm vi khóa luận này, tôi tập trung giới thiệu về kỹ thuật phân tích các tham chiếu API.
+Các đoạn mã javascript được trích xuất theo đó sẽ được xử lý thông qua một số kỹ thuật như phân tích từ vựng, trích xuất bytecode hay tham chiếu các API nhằm đưa ra tập đặc trưng cuối cùng sử dụng trong các mô hình phân loại. Trong phạm vi khóa luận này, em tập trung giới thiệu về 2 kỹ thuật trích xuất các đặc trưng API JavaScript và kỹ thuật trích xuất đặc trưng bytecode
+
+\subsection*{Đặc trưng API JavaScript}
 
 Trong một tài liệu PDF, ngoài sử dụng những API JavaScript của hệ thống, theo tiêu chuẩn ECMAScript như các hàm eval() - thực thi các lệnh JavaScript được mô tả trong chuỗi truyền vào hay hàm unescape() - thực hiện giải mã một chuỗi, thì các API JavaScript của các trình đọc PDF cũng được hỗ trợ. Những API này được tạo ra để giúp tương tác với trình đọc cụ thể. Trong công bố của mình, Davide Maiorca đã giới thiệu về một công cụ mạnh mẽ thực hiện phân tích động và trích xuất các đặc trưng API JavaScript tương tác với trình đọc Acrobat Reader. Hình \ref{fig:luxor} là mô hình kiến trúc của công cụ này - LuxOr \cite{luxor}.
 
@@ -125,6 +127,22 @@ Trong một tài liệu PDF, ngoài sử dụng những API JavaScript của h�
 LuxOr sẽ thực hiện theo dõi tất cả các API JavaScript từ việc phân tích tĩnh và phân tích động. Sau đó, sẽ thông qua một quá trình lựa chọn API. Cuối cùng đưa ra một tập đặc trưng ứng với các API đã chọn để đưa vào quá trình phân loại. Hiện nay có các công cụ để trích xuất động API JavaScript như SpiderMokey hay Mozilla. Tuy nhiên những trình thông dịch như vậy nhận diện dựa trên tiêu chuẩn Js ECMA, không nhận diện được những API tương tác với trình đọc Acrobat Reader, ví dụ một số hàm như app.doc.syncAnnotScan(), app.plugIns.length, app.doc.getAnnots(). Do đó điểm nổi bật của LuxOr đã sử dụng công cụ PhoneyPdf được phát triển để giả lập và mô phỏng Adobe DOM, từ đó có thể thông dịch được các API Acrobat.
 
 Kết quả thực nghiệm của LuxOr đã chứng minh rằng nó có hiệu quả trên rất nhiều các mẫu PDF chứa JavaScript, ngay cả với những CVE chứa những đoạn mã đã bị obfuscation. Có thể nói, công cụ này có thể được sử dụng phục vụ cho phát triển giai đoạn hai trong phương pháp phát hiện tài liệu PDF tôi đã đề xuất ở trên.
+
+\subsection*{Đặc trưng chuỗi bytecode}
+Phương pháp tiếp cận trích xuất đặc trưng bytecode từ mã JavaScript sử dụng kỹ thuật phân tích động. Theo đó, một trình biên dịch mã JavaScript của Google là V8 Engine \footnote{\url{https://v8.dev/}}được sử dụng để chuyển những mã JavaScript thành chuỗi bytecode - mã máy thực thi trong môi trường chạy thực tế. Hình \ref{fig:bytecode_flow} mô tả luồng hoạt động được đề xuất bởi M. F. Rozi và các cộng sự \cite{bytecode}, gồm ba quá trình: tiền xử lý, học không giám sát và phân loại.
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{./images/bytecode_flow.png}
+	\caption{Mô hình luồng hoạt động của phương pháp trích xuất bytecode \cite{bytecode}}
+	\label{fig:bytecode_flow}
+\end{figure}
+
+Quá trình tiền xử lý sử dụng cách tiếp cận trên, thực hiện biên dịch mã JavaScript nhúng trong tệp PDF để chuyển thành chuỗi bytecode trong một môi trường ảo an toàn. Các chuỗi này sau đó được lọc và xử lý để có thể chuyển thành tập các đặc trưng bytecode cuối cùng. Những đặc trưng này là đầu vào cho quá trình học không giám sát sử dụng thuật toán học máy Word2vec để biểu diễn các đặc trưng chuỗi dưới dạng không gian vector. Ở giai đoạn cuối cùng, một kiến trúc mạng nơ-ron DPCNN \cite{dpcnn} được sử dụng.
+
+Quy trình trên đã được tiến hành thử nghiệm trên một tập dữ liệu với một số lượng lớn các tệp PDF có nhúng mã JavaScript cả lành tính lẫn độc hại, đem lại độ chính xác cao và tỉ lệ âm tính giả thấp.
+
 
 \end{document}
 
