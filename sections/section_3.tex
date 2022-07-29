@@ -189,7 +189,7 @@ Ngoài ra một số đặc trưng liên quan đến đoạn mã JavaScript hay 
 
 \subsection{Điều chỉnh tham số và số lượng đặc trưng}
 
-Như đã giới thiệu, ở thí nghiệm này, tôi sử dụng optuna để tự động điều chỉnh tham số đầu vào cho thuật toán học máy LightGBM. Công cụ optuna sử dụng một kỹ thuật gọi là Tree-Parzen Estimator \cite{optuna} đề chọn ra một tập các siêu tham số cho lần thử tiếp theo, dựa trên lịch sử của các lần điều chỉnh trước đó. Vậy nên, sau nhiều vòng lặp, công cụ này có thể mang lại một tập các tham số đầu vào tốt hơn cho thuật toán.
+Như đã giới thiệu, ở thí nghiệm này, tôi sử dụng optuna để tự động điều chỉnh tham số đầu vào cho thuật toán học máy LightGBM. Công cụ optuna sử dụng một kỹ thuật gọi là Tree-Parzen Estimator \cite{optuna} để chọn ra một tập các siêu tham số cho lần thử tiếp theo, dựa trên lịch sử của các lần điều chỉnh trước đó. Vậy nên, sau nhiều vòng lặp, công cụ này có thể mang lại một tập các tham số đầu vào tốt hơn cho thuật toán.
 
 Qua quá trình lặp lại với nhiều lần điều chỉnh, tôi đã chọn được bộ tham số mang lại kết quả tốt nhất cho thuật toán. Dưới đây là biểu đồ so sánh kết quả kiểm định trên các mô hình LightGBM tốt nhất được ghi lại tại sau lần điều 10, 100 và 1000. Biểu đồ \ref{fig:exp1_trials} đã cho thấy hiệu quả của việc điều chỉnh tham số trong mô hình học máy.
 

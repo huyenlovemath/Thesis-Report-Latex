@@ -129,7 +129,7 @@ LuxOr sẽ thực hiện theo dõi tất cả các API JavaScript từ việc ph
 Kết quả thực nghiệm của LuxOr đã chứng minh rằng nó có hiệu quả trên rất nhiều các mẫu PDF chứa JavaScript, ngay cả với những CVE chứa những đoạn mã đã bị obfuscation. Có thể nói, công cụ này có thể được sử dụng phục vụ cho phát triển giai đoạn hai trong phương pháp phát hiện tài liệu PDF tôi đã đề xuất ở trên.
 
 \subsection{Đặc trưng chuỗi bytecode}
-Phương pháp tiếp cận trích xuất đặc trưng bytecode từ mã JavaScript sử dụng kỹ thuật phân tích động. Theo đó, một trình biên dịch mã JavaScript của Google là V8 Engine \footnote{\url{https://v8.dev/}}được sử dụng để chuyển những mã JavaScript thành chuỗi bytecode - mã máy thực thi trong môi trường chạy thực tế. Hình \ref{fig:bytecode_flow} mô tả luồng hoạt động được đề xuất bởi M. F. Rozi và các cộng sự \cite{bytecode}, gồm ba quá trình: tiền xử lý, học không giám sát và phân loại.
+Phương pháp tiếp cận trích xuất đặc trưng bytecode từ mã JavaScript sử dụng kỹ thuật phân tích động. Theo đó, một trình biên dịch mã JavaScript của Google là V8 Engine \footnote{\url{https://v8.dev/}} được sử dụng để chuyển những mã JavaScript thành chuỗi bytecode - mã máy thực thi trong môi trường chạy thực tế. Hình \ref{fig:bytecode_flow} mô tả luồng hoạt động được đề xuất bởi M. F. Rozi và các cộng sự \cite{bytecode}, gồm ba quá trình: tiền xử lý, học không giám sát và phân loại.
 
 
 \begin{figure}[H]
