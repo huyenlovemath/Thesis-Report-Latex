@@ -5,17 +5,17 @@
 Ở chương trước, tôi đã giới thiệu về quy trình phát hiện một tài liệu PDF độc hại, gồm hai phần chính là trích xuất đặc trưng và phân loại dữ liệu. Chương hai này sẽ tiến hành thử nghiệm, từ cài đặt công cụ trích xuất đặc trưng trên tập dữ liệu thu thập được đến xây dựng mô hình học máy mang lại độ chính xác cao khi phân loại một tệp sạch hay độc hại. Các đặc trưng được trích xuất đều dựa trên phân tích tĩnh tệp PDF, gồm hai loại đặc trưng thống kê và đường dẫn cấu trúc. Phần cuối của chương sử dụng mô hình học máy để đánh giá kết quả khi kết hợp các đặc trưng trên.
 
 \section{Tập dữ liệu}
-Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp độc là 58\%, tệp sạch là 42\%, không gây sự chênh lệch quá lớn trên hai nhãn. Trong đó số lượng tài liệu có nhúng javascript chiếm 75\% (Bảng \ref{tab:data_contain_javascript}). Toàn bộ tập dữ liệu là kết quả của quá trình thu thập và loại bỏ tệp trùng lặp từ một số nguồn như Contagio \cite{contagio}, Evasive-PDFMal2022 \cite{evasive} và VirusTotal \footnote{\url{https://www.virustotal.com/}}. Với VirusTotal, thực hiện truy vấn để tìm kiếm các tệp PDF độc hại có nhúng javascript và được gán nhãn CVE có độ nguy hiểm cao. Một số CVE được thu thập trong các tài liệu PDF độc như CVE-2007-5659, CVE-2008-2992, CVE-2009-4324, CVE-2010-0188,...
+Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp độc là 58\%, tệp sạch là 42\%, không gây sự chênh lệch quá lớn trên hai nhãn. Trong đó số lượng tài liệu có nhúng JavaScript chiếm 75\% (Bảng \ref{tab:data_contain_JavaScript}). Toàn bộ tập dữ liệu là kết quả của quá trình thu thập và loại bỏ tệp trùng lặp từ một số nguồn như Contagio \cite{contagio}, Evasive-PDFMal2022 \cite{evasive} và VirusTotal \footnote{\url{https://www.virustotal.com/}}. Với VirusTotal, thực hiện truy vấn để tìm kiếm các tệp PDF độc hại có nhúng JavaScript và được gán nhãn CVE có độ nguy hiểm cao. Một số CVE được thu thập trong các tài liệu PDF độc như CVE-2007-5659, CVE-2008-2992, CVE-2009-4324, CVE-2010-0188,...
 
 \begin{table}[]
 	\centering
-	\caption{Thống kê số lượng tệp dữ liệu có chứa javascript.}
-	\label{tab:data_contain_javascript}
+	\caption{Thống kê số lượng tệp dữ liệu có chứa JavaScript.}
+	\label{tab:data_contain_JavaScript}
 	\begin{tabular}{|l|c|c|c|}
 		\hline
-		        & contain js & no contain js & total \\ \hline
-		malware & 12183      & 584           & 12767 \\ \hline
-		benign  & 4326       & 4953          & 9279  \\ \hline
+		              & Chứa JavaScript & Không chứa mã JavaScript & Tổng  \\ \hline
+		tệp độc hại   & 12183           & 584                      & 12767 \\ \hline
+		tệp lành tính & 4326            & 4953                     & 9279  \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -28,9 +28,9 @@ Các tệp PDF sau khi được xử lý qua quá trình trích xuất đặc tr
 	\begin{tabular}{|l|c|}
 		\hline
 		               & Samples \\ \hline
-		Training set   & 15431   \\ \hline
-		Validation set & 4409    \\ \hline
-		Test set       & 2205    \\ \hline
+		Tập huấn luyện & 15431   \\ \hline
+		Tập kiểm chứng & 4409    \\ \hline
+		Tập kiểm thử   & 2205    \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -38,7 +38,7 @@ Các tệp PDF sau khi được xử lý qua quá trình trích xuất đặc tr
 \subsection{Đặc trưng thống kê}
 Các đặc trưng thống kê là các đặc trưng được trích xuất từ quá trình phân tích cú pháp, cấu trúc của tệp PDF, mang ý nghĩa thống kê như đếm số lượng từ khóa xuất hiện trong tài liệu, phân tích tương quan giữa các giá trị, số lượng bộ lọc được sử dụng...
 
-Trình đọc PDF sử dụng các từ khóa được nhúng trong tài liệu, theo sau bởi ký tự ‘\slash’ để hiểu những hành động cần thực thi, do đó tập hợp những từ khóa có thể là các chỉ báo hiệu quả về hành vi của tài liệu. Một số từ khóa có thể có liên quan chặt chẽ tới một số lỗ hổng hoặc hành vi độc hại, điển hình như ‘\slash JS’ hay ‘\slash Javascript’ chỉ ra có đoạn mã javascript được nhúng trong tài liệu, những đoạn mã này có độ nguy hiểm cao bởi xuất hiện trong hầu hết các cuộc tấn công mã độc; hay ‘\slash URI’: cho phép truy cập một nguồn từ xa, bằng cách này, kẻ tấn công có thể chuyển hướng người dùng tới một trang web độc hại.
+Trình đọc PDF sử dụng các từ khóa được nhúng trong tài liệu, theo sau bởi ký tự ‘\slash’ để hiểu những hành động cần thực thi, do đó tập hợp những từ khóa có thể là các chỉ báo hiệu quả về hành vi của tài liệu. Một số từ khóa có thể có liên quan chặt chẽ tới một số lỗ hổng hoặc hành vi độc hại, điển hình như ‘\slash JS’ hay ‘\slash JavaScript’ chỉ ra có đoạn mã JavaScript được nhúng trong tài liệu, những đoạn mã này có độ nguy hiểm cao bởi xuất hiện trong hầu hết các cuộc tấn công mã độc; hay ‘\slash URI’: cho phép truy cập một nguồn từ xa, bằng cách này, kẻ tấn công có thể chuyển hướng người dùng tới một trang web độc hại.
 
 Tài liệu PDF hỗ trợ một số các bộ lọc phục vụ nén, mã hóa dữ liệu. Những kẻ tấn công có thể lợi dụng bộ lọc để ẩn các đoạn mã độc hại và che giấu hành vi. Do đó, việc xác định những bộ lọc nào được sử dụng, những bộ lọc nào thường xuất hiện trong tệp độc hại hay tệp sạch sẽ mang lại những đặc trưng có giá trị trong việc phân loại tệp.
 
@@ -50,7 +50,7 @@ Thông qua việc kết hợp sử dụng hai công cụ PeePDF \footnote{\url{h
 % \usepackage{longtable}
 % Note: It may be necessary to compile the document several times to get a multi-page table to line up properly
 \begin{longtable}[c]{|p{.4\textwidth}|p{.6\textwidth}|}
-	\caption{Danh sách 67 đặc trưng thống kê và mô tả}
+	\caption{Các đặc trưng thống kê}
 	\label{tab:danh_sach_bang_67_dac_trung}                                                                                                                                 \\
 	\hline
 	\textbf{Tên đặc trưng}                    & \textbf{Mô tả}                                                                                                              \\ \hline
@@ -77,7 +77,7 @@ Thông qua việc kết hợp sử dụng hai công cụ PeePDF \footnote{\url{h
 	num\_error\_objects                       & Số lượng các đối tượng lỗi                                                                                                  \\ \hline
 	num\_object\_streams                      & Số lượng các stream chứa đối tượng                                                                                          \\ \hline
 	num\_xref\_streams                        & Số lượng xref stream (từ phiên bản 1.5, tệp PDF cho phép bảng tham chiếu được lưu dưới dạng stream với từ khóa /ObjStm)     \\ \hline
-	num\_objects\_contain\_js                 & Số lượng đối tượng chứa đoạn mã javascript                                                                                  \\ \hline
+	num\_objects\_contain\_js                 & Số lượng đối tượng chứa đoạn mã JavaScript                                                                                  \\ \hline
 	num\_\%\%EOF                              & Số lần xuất hiện của từ khóa đánh dấu sự kết thúc của tệp PDF                                                               \\ \hline
 	char\_after\_last\_EOF                    & Số lượng ký tự sau từ khóa kết thúc cuối cùng trong tệp PDF                                                                 \\ \hline
 	stream\_entropy\_less\_than\_2            & Kiểm tra xem entropy của tệp có nhỏ hơn 2 hay không (entropy tính toán sự phân bổ ngẫu nhiên của các bytes trong chuỗi)     \\ \hline
@@ -94,7 +94,7 @@ Thông qua việc kết hợp sử dụng hai công cụ PeePDF \footnote{\url{h
 	/Page                                     & Số lần xuất hiện của từ khóa 'Page', xác định một trang của tệp PDF                                                         \\ \hline
 	/Encrypt                                  & Số lần xuất hiện của từ khóa 'Encrypt'                                                                                      \\ \hline
 	/ObjStm                                   & Số lần xuất hiện của từ khóa 'ObjStm'                                                                                       \\ \hline
-	/JS                                       & Số lần xuất hiện của từ khóa 'JS', xác định đoạn mã javascript                                                              \\ \hline
+	/JS                                       & Số lần xuất hiện của từ khóa 'JS', xác định đoạn mã JavaScript                                                              \\ \hline
 	/JavaScript                               & Số lần xuất hiện của từ khóa 'JavaScript', tương tự như từ khóa 'JS                                                         \\ \hline
 	/AA                                       & Số lần xuất hiện của từ khóa 'AA', xác định các hành động bổ sung, các sự kiện kích hoạt một hành vi nào đó                 \\ \hline
 	/OpenAction                               & Số lần xuất hiện của từ khóa 'OpenAction', xác định hành động sẽ được thực thi ngay sau khi tệp PDF được mở                 \\ \hline
@@ -110,7 +110,7 @@ Thông qua việc kết hợp sử dụng hai công cụ PeePDF \footnote{\url{h
 	/SubmitForm                               & Số lần xuất hiện của từ khóa 'SubmitForm'                                                                                   \\ \hline
 	/ImportData                               & Số lần xuất hiện của từ khóa 'ImportData'                                                                                   \\ \hline
 	Colors \textgreater 2\textasciicircum{}24 & Số lượng màu có kích thước lớn hơn 2\textasciicircum{}24 (hơn 3 bytes)                                                      \\ \hline
-	combination\_js\_and\_action              & Kiểm tra sự xuất hiện đồng thời của các đoạn mã javascript và các hành động khởi chạy                                       \\ \hline
+	combination\_js\_and\_action              & Kiểm tra sự xuất hiện đồng thời của các đoạn mã JavaScript và các hành động khởi chạy                                       \\ \hline
 	num\_EmbeddedFile                         & Số lượng tệp được nhúng trong tài liệu PDF                                                                                  \\ \hline
 	num\_URI                                  & Số lần xuất hiện của từ khóa 'URI', đường dẫn tới một nguồn từ xa, có thể là một trang web                                  \\ \hline
 	num\_ASCIIHexDecode                       & Số lần sử dụng thuật toán giải mã ASCIIHexDecode                                                                            \\ \hline
@@ -166,7 +166,7 @@ Một số đường dẫn có thể xảy ra rất ít trong tập dữ liệu 
 
 
 \subsection*{Công cụ Hidost}
-Công cụ Hidost \footnote{\url{https://github.com/srndic/hidost}} là công cụ được phát triển dựa theo ý tưởng trên, thực hiện trích xuất các đặc trưng đường dẫn cấu trúc của một tệp PDF, ngoài ra còn hỗ trợ các tệp SWF. Đầu vào của công cụ là một tập các tệp PDF, đầu ra là một tập các tệp dữ liệu đã được trích xuất tương ứng với từng tệp đầu vào. Trong quá trình cài đặt, với số lượng mẫu hơn 20000 tệp, tôi đã tiến hành đặt ngưỡng 900, tức các đặc trưng đường dẫn xuất hiện trong ít nhất 900 tệp sẽ được sử dụng trong tập đặc trưng cuối cùng. Kết quả sau khi thực thi, có 315 đặc trưng được trích xuất, phục vụ cho quá trình huấn luyện xây dựng mô hình học máy ở các phần sau.
+Công cụ Hidost \footnote{\url{https://github.com/srndic/hidost}} là công cụ được phát triển dựa theo ý tưởng trên, thực hiện trích xuất các đặc trưng đường dẫn cấu trúc của một tệp PDF, ngoài ra còn hỗ trợ các tệp SWF. Đầu vào của công cụ là một tập các tệp PDF, đầu ra là một tập các tệp dữ liệu đã được trích xuất tương ứng với từng tệp đầu vào. Trong quá trình cài đặt, với số lượng mẫu hơn 20000 tệp, tôi đã tiến hành đặt ngưỡng 900, tức các đặc trưng đường dẫn xuất hiện trong ít nhất 900 tệp sẽ được sử dụng trong tập đặc trưng cuối cùng. Kết quả sau khi thực thi, có 315 đặc trưng được trích xuất, phục vụ cho quá trình huấn luyện xây dựng mô hình học máy ở các phần sau. Do số lượng đặc trưng là tương đối lớn nên sẽ không được liệt kê trong khóa luận này, có thể xem
 
 \section{Phân loại và đánh giá kết quả}
 
@@ -174,7 +174,7 @@ Như đã đề cập ở mục 1.3, một quy trình phát hiện tự động 
 
 Hai thuật toán học máy được cân nhắc đưa vào thử nghiệm gồm Random Forest và LightGBM. Ngoài ra, ở cả hai thuật toán này, tôi sử dụng thêm \textbf{optuna} \footnote{\url{https://optuna.org}} - một framework hỗ trợ điều chỉnh tự động các tham số cho mô hình học máy để mang lại kết quả tốt nhất mong muốn. Sau khi thử điều chỉnh tham số với 100 vòng lặp, nhận thấy LightGBM mang lại kết quả tốt hơn trên tập kiểm định với độ chính xác tốt nhất là 99,68\%, trong khi RandomForest mang lại độ chính xác tốt nhất là 99.47\%. Từ đây, thuật toán LightGBM sẽ được sử dụng trong tất cả các kết quả dưới đây.
 
-\subsection{Xếp hạng đặc trưng theo độ quan trọng}
+\subsection{Xếp hạng đặc trưng}
 Quá trình trích xuất sử dụng các công cụ PDFiD, PeePDF và Hidost mang lại tổng 382 đặc trưng, trong đó có 67 đặc trưng thống kê và 315 đặc trưng đường dẫn cấu trúc. Thông qua thuật toán LightGBM, mức độ quan trọng của các đặc trưng được đánh giá như hình \ref{fig:lgbm_importances}
 
 \begin{figure}[H]
@@ -186,16 +186,16 @@ Quá trình trích xuất sử dụng các công cụ PDFiD, PeePDF và Hidost m
 
 Quan sát kết quả xếp hạng độ quan trọng các đặc trưng, có thể thấy các đặc trưng liên quan đến kích thước dữ liệu, nội dung trong tệp PDF mang lại độ quan trọng cao nhất, ví dụ như Metadata\slash Length, Pages\slash Contents\slash Length hay file\_size.
 
-Ngoài ra một số đặc trưng liên quan đến đoạn mã javascript hay liên quan đến biểu mẫu tương tác AcroForm trong tài liệu PDF cũng mang lại sự hữu ích trong mô hình phân loại khi xuất hiện nhiều trong top 50 này, ví dụ \slash JS, \slash Javascript, AcroFormDRFontName, AcroFormXFA, AcroFormFieldsT, NamesJavascriptNameJSLength.
+Ngoài ra một số đặc trưng liên quan đến đoạn mã JavaScript hay liên quan đến biểu mẫu tương tác AcroForm trong tài liệu PDF cũng mang lại sự hữu ích trong mô hình phân loại khi xuất hiện nhiều trong top 50 này, ví dụ \slash JS, \slash JavaScript, AcroFormDRFontName, AcroFormXFA, AcroFormFieldsT, NamesJavaScriptNameJSLength.
 
-\subsection{So sánh kết quả khi điều chỉnh tham số và số lượng đặc trưng}
+\subsection{Điều chỉnh tham số và số lượng đặc trưng}
 
 Như đã giới thiệu, ở thí nghiệm này, tôi sử dụng optuna để tự động điều chỉnh tham số đầu vào cho thuật toán học máy LightGBM. Qua quá trình lặp lại với nhiều lần điều chỉnh, tôi đã chọn được bộ tham số mang lại kết quả tốt nhất cho thuật toán. Dưới đây là biểu đồ so sánh kết quả kiểm định trên các mô hình LightGBM tốt nhất được ghi lại tại lần thử thứ 10, 100 và 1000. Biểu đồ \ref{fig:exp1_trials} đã cho thấy hiệu quả của việc điều chỉnh tham số trong mô hình học máy.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{./images/exp1_trials.png}
-	\caption{Biểu đồ so sánh kết quả điều chỉnh tham số thuật toán LightGBM qua các lần lặp trên tập kiểm chứng}
+	\caption{Biểu đồ so sánh kết quả thuật toán LightGBM qua các lần điều chỉnh trên tập kiểm chứng}
 	\label{fig:exp1_trials}
 \end{figure}
 
@@ -235,7 +235,7 @@ Việc sử dụng nhiều hơn các đặc trưng bằng thực nghiệm trên 
 \end{figure}
 
 
-\subsection{So sánh kết quả khi kết hợp các loại đặc trưng}
+\subsection{Kết hợp các loại đặc trưng}
 
 Để đánh giá sự kết hợp của các đặc trưng thống kê và đường dẫn cấu trúc, thực hiện 3 thử nghiệm cho mô hình khi chỉ sử dụng tập đặc trưng thống kê, chỉ sử dụng tập đặc trưng cấu trúc cây và cuối cùng là sử dụng kết hợp hai loại đặc trưng này. Kết quả được biểu diễn trên biểu đồ \ref{fig:exp1_compare_combination}, đã cho thấy một kết quả tốt nhất khi kết hợp các loại đặc trưng này với nhau.
 
