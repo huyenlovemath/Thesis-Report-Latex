@@ -111,7 +111,7 @@ Tài liệu PDF độc hại sử dụng JavaScript thường được đặc tr
 Nhằm phục vụ cho việc phân tích hành vi độc hại, đầu tiên, các đoạn mã JavaScript sẽ được trích xuất tĩnh hoặc động. Với phương pháp tĩnh, mã sẽ được trích xuất trực tiếp từ tệp, qua việc tìm vị trí của các đoạn mã JavaScript (thường được tìm thông qua các từ khóa “/JavaScript” hoặc “/JS”). Trong khi đó, ở phương pháp động, tệp sẽ được mở và lấy được chính xác đoạn mã nào sẽ thực thi (đặc biệt hữu ích trong việc chống lại kỹ thuật obfuscation). Việc trích xuất động sẽ yêu cầu một môi trường an toàn để thực thi và đòi hỏi nhiều tài nguyên hơn.
 
 
-Các đoạn mã javascript được trích xuất theo đó sẽ được xử lý thông qua một số kỹ thuật như phân tích từ vựng, trích xuất bytecode hay tham chiếu các API nhằm đưa ra tập đặc trưng cuối cùng sử dụng trong các mô hình phân loại. Trong phạm vi khóa luận này, em tập trung giới thiệu về 2 kỹ thuật trích xuất các đặc trưng API JavaScript và kỹ thuật trích xuất đặc trưng bytecode
+Các đoạn mã javascript được trích xuất theo đó sẽ được xử lý thông qua một số kỹ thuật như phân tích từ vựng, trích xuất bytecode hay tham chiếu các API nhằm đưa ra tập đặc trưng cuối cùng sử dụng trong các mô hình phân loại. Hai kỹ thuật trích xuất sẽ được giới thiệu, gồm trích xuất đặc trưng API JavaScript và đặc trưng bytecode
 
 \subsection{Đặc trưng API JavaScript}
 
