@@ -112,20 +112,20 @@ Cấu trúc logic của tài liệu PDF chỉ ra cách các đối tượng liê
 
 \footnotetext{\url{https://www.iso.org/standard/51502.html}}
 
+\subsubsection*{catalog}
+Đối tượng catalog cung cấp thông tin chung về loại đối tượng nào sẽ được hiển thị trong tệp PDF, nội dung của tài liệu và một số hướng dẫn cụ thể cho các trình đọc PDF về cách hiển thị PDF lên màn hình sau khi được mở. Hình \ref{fig:catalog} là một ví dụ về một đối tượng catalog trong tệp PDF, với từ khóa 'PageMode' xác định cách tệp sẽ được hiển thị, 'OpenAction' chỉ định hành động sẽ được thực thi ngay sau khi mở tệp, và 'Pages' tham chiếu tới nút gốc của một cây các trang trong tài liệu PDF.
+% figure
+\begin{figure}[ht!]
+	\centering
+	\includegraphics[width=0.5\linewidth]{./images/catalog.png}
+	\caption{Đối tượng catalog trong tài liệu PDF}
+	\label{fig:catalog}
+\end{figure}
 
-\begin{description}
-	\item[Catalog]  cung cấp thông tin chung về loại đối tượng nào sẽ được hiển thị trong tệp PDF, nội dung của tài liệu và một số hướng dẫn cụ thể cho các trình đọc PDF về cách hiển thị PDF lên màn hình sau khi được mở. Hình \ref{fig:catalog} là một ví dụ về một đối tượng catalog trong tệp PDF, với từ khóa 'PageMode' xác định cách tệp sẽ được hiển thị, 'OpenAction' chỉ định hành động sẽ được thực thi ngay sau khi mở tệp, và 'Pages' tham chiếu tới nút gốc của một cây các trang trong tài liệu PDF.
-	      % figure
-	      \begin{figure}[ht!]
-		      \centering
-		      \includegraphics[width=0.5\linewidth]{./images/catalog.png}
-		      \caption{Đối tượng catalog trong tài liệu PDF}
-		      \label{fig:catalog}
-	      \end{figure}
+\subsubsection*{Page Tree}
+Các trang của tài liệu PDF được liên kết thông qua một cây các trang - định nghĩa thứ tự truy cập, gọi là Page Tree. Sử dụng cấu trúc cây cho phép các trình đọc PDF nhanh chóng mở các trang trong tài liệu chứa hàng nghìn trang. Nút gốc của cây được chỉ định thông qua tham chiếu /Pages trong đối tượng Catalog.
 
-	\item[Page Tree] Các trang của tài liệu PDF được liên kết thông qua một cây các trang - định nghĩa thứ tự truy cập. Sử dụng cấu trúc cây cho phép trình đọc nhanh chóng mở các trang trong tài liệu chứa hàng nghìn trang. Nút gốc của cây được chỉ định thông qua tham chiếu /Pages trong đối tượng Catalog.
 
-\end{description}
 
 \section{Một số thuật toán phân loại}
 
