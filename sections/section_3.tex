@@ -5,7 +5,10 @@
 Ở chương trước, tôi đã giới thiệu về quy trình phát hiện một tài liệu PDF độc hại, gồm hai phần chính là trích xuất đặc trưng và phân loại dữ liệu. Chương hai này sẽ tiến hành thử nghiệm, từ cài đặt công cụ trích xuất đặc trưng trên tập dữ liệu thu thập được đến xây dựng mô hình học máy mang lại độ chính xác cao khi phân loại một tệp sạch hay độc hại. Các đặc trưng được trích xuất đều dựa trên phân tích tĩnh tệp PDF, gồm hai loại đặc trưng thống kê và đường dẫn cấu trúc. Phần cuối của chương sử dụng mô hình học máy để đánh giá kết quả khi kết hợp các đặc trưng trên.
 
 \section{Tập dữ liệu}
+
+
 Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp độc là 58\%, tệp sạch là 42\%, không gây sự chênh lệch quá lớn trên hai nhãn. Trong đó số lượng tài liệu có nhúng JavaScript chiếm 75\% (Bảng \ref{tab:data_contain_JavaScript}). Toàn bộ tập dữ liệu là kết quả của quá trình thu thập và loại bỏ tệp trùng lặp từ một số nguồn như Contagio \cite{contagio}, Evasive-PDFMal2022 \footnote{\url{https://www.unb.ca/cic/datasets/pdfmal-2022.html}} và VirusTotal \footnote{\url{https://www.virustotal.com/}}. Với VirusTotal, thực hiện truy vấn để tìm kiếm các tệp PDF độc hại có nhúng JavaScript và được gán nhãn CVE có độ nguy hiểm cao. Một số CVE được thu thập trong các tài liệu PDF độc như CVE-2007-5659, CVE-2008-2992, CVE-2009-4324, CVE-2010-0188,...
+
 
 \begin{table}[]
 	\centering
@@ -19,7 +22,9 @@ Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp
 	\end{tabular}
 \end{table}
 
+
 Các tệp PDF sau khi được xử lý qua quá trình trích xuất đặc trưng, sẽ được phân chia thành các tập dữ liệu phục vụ quá trình huấn luyện và kiểm định. Với mô hình yêu cầu một tập validation phục vụ cho quá trình điều chỉnh tham số hay lựa chọn bộ đặc trưng tốt, sự phân chia sẽ theo tỉ lệ 7:2:1 với 70\% là tập huấn luyện, 20\% là tập kiểm chứng, 10\% là tập kiểm thử (Bảng \ref{tab:phan_bo_tap_huan_luyen}).
+
 
 \begin{table}[]
 	\centering
@@ -178,16 +183,18 @@ Hai thuật toán học máy được cân nhắc đưa vào thử nghiệm gồ
 \subsection{Xếp hạng đặc trưng}
 Quá trình trích xuất sử dụng các công cụ PDFiD, PeePDF và Hidost mang lại tổng 382 đặc trưng, trong đó có 67 đặc trưng thống kê và 315 đặc trưng đường dẫn cấu trúc. Thông qua thuật toán LightGBM, mức độ quan trọng của các đặc trưng được đánh giá như hình \ref{fig:lgbm_importances}
 
+Quan sát kết quả xếp hạng độ quan trọng các đặc trưng, có thể thấy các đặc trưng liên quan đến kích thước dữ liệu, nội dung trong tệp PDF mang lại độ quan trọng cao nhất, ví dụ như Metadata\slash Length, Pages\slash Contents\slash Length hay file\_size.
+
+
+Ngoài ra một số đặc trưng liên quan đến đoạn mã JavaScript hay liên quan đến biểu mẫu tương tác AcroForm trong tài liệu PDF cũng mang lại sự hữu ích trong mô hình phân loại khi xuất hiện nhiều trong top 50 này, ví dụ \slash JS, \slash JavaScript, AcroFormDRFontName, AcroFormXFA, AcroFormFieldsT, NamesJavaScriptNameJSLength.
+
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{./images/lgbm_importances-01.png}
 	\caption{Biểu đồ 50 đặc trưng có độ quan trọng cao nhất trong các đặc trưng thống kê và đường dẫn cấu trúc.}
 	\label{fig:lgbm_importances}
 \end{figure}
-
-Quan sát kết quả xếp hạng độ quan trọng các đặc trưng, có thể thấy các đặc trưng liên quan đến kích thước dữ liệu, nội dung trong tệp PDF mang lại độ quan trọng cao nhất, ví dụ như Metadata\slash Length, Pages\slash Contents\slash Length hay file\_size.
-
-Ngoài ra một số đặc trưng liên quan đến đoạn mã JavaScript hay liên quan đến biểu mẫu tương tác AcroForm trong tài liệu PDF cũng mang lại sự hữu ích trong mô hình phân loại khi xuất hiện nhiều trong top 50 này, ví dụ \slash JS, \slash JavaScript, AcroFormDRFontName, AcroFormXFA, AcroFormFieldsT, NamesJavaScriptNameJSLength.
 
 \subsection{Điều chỉnh tham số và số lượng đặc trưng}
 
