@@ -14,8 +14,8 @@ Tập dữ liệu bao gồm 22046 tệp PDF riêng biệt, với tỉ lệ tệp
 	\begin{tabular}{|l|c|c|c|}
 		\hline
 		              & Chứa JavaScript & Không chứa JavaScript & Tổng  \\ \hline
-		tệp độc hại   & 12183           & 584                   & 12767 \\ \hline
-		tệp lành tính & 4326            & 4953                  & 9279  \\ \hline
+		Tệp độc hại   & 12183           & 584                   & 12767 \\ \hline
+		Tệp lành tính & 4326            & 4953                  & 9279  \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -27,10 +27,10 @@ Các tệp PDF sau khi được xử lý qua quá trình trích xuất đặc tr
 	\label{tab:phan_bo_tap_huan_luyen}
 	\begin{tabular}{|l|c|}
 		\hline
-		               & Samples \\ \hline
-		Tập huấn luyện & 15431   \\ \hline
-		Tập kiểm chứng & 4409    \\ \hline
-		Tập kiểm thử   & 2205    \\ \hline
+		               & Số lượng \\ \hline
+		Tập huấn luyện & 15431    \\ \hline
+		Tập kiểm chứng & 4409     \\ \hline
+		Tập kiểm thử   & 2205     \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -126,6 +126,8 @@ Thông qua việc kết hợp sử dụng hai công cụ PeePDF \footnote{\url{h
 	num\_stream\_filters                      & Số lượng bộ lọc được sử dụng                                                                                                \\ \hline
 	num\_unknown\_stream\_filters             & Số lượng bộ lọc được sử dụng nhưng không trong danh sách các bộ lọc được hỗ trợ của tài liệu PDF                            \\ \hline
 \end{longtable}
+
+
 \subsection{Đặc trưng cấu trúc cây}
 Như đề cập ở mục 1.1.3, các đối tượng của tệp PDF được tổ chức phân cấp dạng cây. Do đó việc xem xét cách sắp xếp các đối tượng trên cấu trúc cây như vậy có thể tiết lộ những thông tin giá trị để phát hiện tài liệu độc hại. Phương pháp tiếp cận này được đề xuất bởi Nedim Srndic và Lavel Laskov \cite{hidost}. Ở phương pháp này, mỗi đường dẫn cấu trúc tới lá trong cây sẽ đại diện cho một đặc trưng, tập hợp các đặc trưng sau đó sẽ được xử lý thông qua một kỹ thuật gọi là Hợp nhất đường dẫn cấu trúc để hợp nhất những đường dẫn tương tự nhau.
 
@@ -136,7 +138,7 @@ Như đề cập ở mục 1.1.3, các đối tượng của tệp PDF được 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{./images/hidost_12_tree_path.png}
-	\caption{Minh họa cấu trúc cây và đường dẫn cấu trúc của tệp PDF}
+	\caption{Minh họa cấu trúc cây và đường dẫn cấu trúc của tệp PDF \cite{hidost}}
 	\label{fig:hidost_12_tree_path}
 \end{figure}
 
@@ -145,20 +147,20 @@ Như đề cập ở mục 1.1.3, các đối tượng của tệp PDF được 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{./images/hidost_kv_01.png}
-	\caption{Các cặp đường dẫn cấu trúc và giá trị chưa chuẩn hóa}
+	\caption{Các cặp đường dẫn cấu trúc và giá trị chưa chuẩn hóa \cite{hidost}}
 	\label{fig:hidost_kv_01}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{./images/hidost_kv_02.png}
-	\caption{Các cặp đường dẫn cấu trúc và giá trị sau khi được chuẩn hóa về dạng số}
+	\caption{Các cặp đường dẫn cấu trúc và giá trị sau khi được chuẩn hóa về dạng số \cite{hidost}}
 	\label{fig:hidost_kv_02}
 \end{figure}
 
 
 \subsection*{Hợp nhất đường dẫn cấu trúc}
-Một tệp PDF có cấu trúc tương đối phức tạp, do đó có thể trích xuất được một lượng lớn các đường dẫn và có nhiều đường dẫn có cấu trúc tương tự nhau. Do đó, một tập các quy tắc được xây dựng để hợp nhất các đường dẫn tương đương [ref]
+Một tệp PDF có cấu trúc tương đối phức tạp, do đó có thể trích xuất được một lượng lớn các đường dẫn và có nhiều đường dẫn có cấu trúc tương tự nhau. Do đó, một tập các quy tắc được xây dựng để hợp nhất các đường dẫn tương đương.
 
 
 \subsection*{Lựa chọn đặc trưng}

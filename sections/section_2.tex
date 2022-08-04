@@ -3,8 +3,10 @@
 
 \begin{document}
 Chương này gồm ba kiến thức nền tảng. Đầu tiên trình bày sơ bộ về các đối tượng và cách cấu trúc một tài liệu PDF, từ đó là bước đệm để hiểu cách phần mềm độc hại được nhúng vào tệp cũng như là cách để có thể xác định các bất thường trong cấu trúc một tệp PDF. Tiếp theo giới thiệu về một số thuật toán học máy được sử dụng khi xây dựng mô hình phân loại tự động các tệp PDF độc hại. Phần cuối cùng đưa ra cách tiếp cận và quy trình để có thể phát hiện tệp độc hại.
-\section{Định dạng tệp PDF}
-Tệp pdf là một trong những định dạng phổ biến nhất để lưu trữ tài liệu trên toàn thế giới. Năm 1993, PDF được Adobe Systems định nghĩa và đến năm 2008, PDF đã trở thành một tiêu chuẩn mở được phát hành dưới chuẩn ISO 32000-1.
+
+\section{Định dạng tài liệu PDF}
+Hiện nay, PDF là một trong những định dạng phổ biến nhất để lưu trữ tài liệu trên toàn thế giới. Năm 1993, PDF được Adobe Systems định nghĩa và đến năm 2008, PDF đã trở thành một tiêu chuẩn mở được phát hành dưới chuẩn ISO 32000-1.
+
 \subsection{Các đối tượng tài liệu}
 Cấu trúc của tệp PDF bao gồm các đối tượng liên kết với nhau trong một cấu trúc cây. Những đối tượng này được chia thành ba loại, gồm có các đối tượng đơn giản, các đối tượng ghép và đối tượng độc lập.
 \subsubsection*{Đối tượng đơn giản}
@@ -70,7 +72,7 @@ Trailer PDF được lưu ở cuối tệp, chỉ định vị trí của bảng
 % figure
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=0.5\linewidth]{./images/img_trailer_pdf.png}
+	\includegraphics[width=0.7\linewidth]{./images/img_trailer_pdf.png}
 	\caption{Một trailer trong tài liệu PDF}
 	\label{fig:trailer}
 \end{figure}
@@ -92,10 +94,10 @@ Có thể thấy trong hình \ref{fig:update}, tệp PDF vẫn chứa các phầ
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[width=0.5\linewidth]{./images/img_increase_update.png}
-	\caption{Cấu trúc tệp PDF khi có cập nhật \protect\footnotemark}
+	\caption{Cấu trúc tệp PDF khi có cập nhật }
 	\label{fig:update}
 \end{figure}
-
+% \footnotetext{\url{https://www.iso.org/standard/51502.html}}
 \subsection{Cấu trúc logic}
 
 Cấu trúc logic của tài liệu PDF chỉ ra cách các đối tượng liên kết với nhau và được tổ chức sao cho các trình đọc PDF có thể hiểu và xử lý tài liệu một cách thích hợp. Các đối tượng này được xây dựng dựa trên một mô hình phân cấp dạng cây, với nút gốc là một đối tượng catalog (Hình \ref{fig:logic_structure}).
@@ -103,7 +105,7 @@ Cấu trúc logic của tài liệu PDF chỉ ra cách các đối tượng liê
 % figure
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[width=0.75\linewidth]{./images/logic_structure_pdf.png}
+	\includegraphics[width=0.8\linewidth]{./images/logic_structure_pdf.png}
 	\caption{Mô hình phân cấp các đối tượng bên trong cấu trúc logic của tài liệu PDF \protect\footnotemark}
 	\label{fig:logic_structure}
 \end{figure}
@@ -171,9 +173,11 @@ Nhận thức được điểm yếu khi chỉ sử dụng một mô hình đơn
 \begin{figure}[ht!]
 	\centering
 	\includegraphics[width=\linewidth]{./images/compare_ensemble_methods.png}
-	\caption{So sánh các kỹ thuật được sử dụng trong mô hình sử dụng phương pháp học kết hợp}
+	\caption{So sánh các kỹ thuật được sử dụng trong mô hình sử dụng phương pháp học kết hợp\protect\footnotemark}
 	\label{fig:compare_ensemble_methods}
 \end{figure}
+
+\footnotetext{\url{https://mateusmaiads.github.io/ensemble_qualify}}
 
 Trong phạm vi của khóa luận này, tôi đề xuất sử dụng một thuật toán boosting được phát triển bởi Microsoft là LightGBM \footnote{\url{https://lightgbm.readthedocs.io/en/v3.3.2/}}. LightGBM viết tắt của Light Gradient Boosting Machine, là một mô hình xử lý thuật toán học kết hợp tăng cường. Mô hình này cũng sử dụng Cây quyết định để xây dựng các mô hình thành phần. Sau mỗi lần thực hiện huấn luyện trên một mô hình với một tập dữ liệu con, thuật toán sẽ cập nhật tham số của mô hình theo hướng giảm của đạo hàm hàm mất mát.
 
